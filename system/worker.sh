@@ -32,6 +32,8 @@ CONTROL="$HOME/hq/control"
 QUEUE="$CONTROL/queue.md"
 INBOX="$CONTROL/inbox.md"
 HISTORY="$CONTROL/history.md"
+PROPOSED="$CONTROL/proposed.md"
+SENSES_STAMP="$HQ/.last-senses"
 CLAUDE_BIN="$HOME/.local/bin/claude"
 LOCK="$HQ/worker.lock"
 LOG="$HQ/logs/worker-$(date +%Y%m%d-%H%M).log"
@@ -142,6 +144,38 @@ if [ -s "$RUNS" ]; then
 fi
 
 log_event run_start "" "" OK 0 ""
+
+# --- senses: once a day, read Gmail + Calendar and SUGGEST work ---
+# Suggestions land in proposed.md and do nothing until Joon ticks them. Email is
+# written by other people, so it can never reach the queue without him in between.
+# Read-only Gmail/Calendar tools only — no send, no reply, no delete.
+if [ ! -f "$SENSES_STAMP" ] || [ -n "$(find "$SENSES_STAMP" -mmin +1200 2>/dev/null)" ]; then
+  t0=$(date +%s)
+  before_p=$(count '^-[[:space:]]\[' "$PROPOSED")
+  "$CLAUDE_BIN" -p "$(cat "$HQ/senses-prompt.md")" \
+    --model claude-sonnet-5 \
+    --permission-mode acceptEdits \
+    --allowedTools 'mcp__claude_ai_Gmail__search_threads,mcp__claude_ai_Gmail__get_thread,mcp__claude_ai_Google_Calendar__list_events,mcp__claude_ai_Google_Calendar__list_calendars' \
+    >> "$LOG" 2>&1
+  after_p=$(count '^-[[:space:]]\[' "$PROPOSED")
+  newp=$((after_p - before_p)); [ "$newp" -lt 0 ] && newp=0
+  touch "$SENSES_STAMP"
+  log_event senses "" claude-sonnet-5 "PROPOSED_${newp}" "$(( $(date +%s) - t0 ))" ""
+  [ "$newp" -gt 0 ] && ping "👀 HQ — noticed ${newp} thing(s)" "From your email and calendar. Tick the ones you want in ~/hq/control/proposed.md; ignore the rest."
+fi
+
+# --- approved proposals become inbox notes ---
+# Joon ticks `- [x]` in proposed.md; those lines move into the inbox so normal
+# intake files them like anything he wrote himself. Unticked lines stay put.
+if [ -f "$PROPOSED" ] && grep -q '^-[[:space:]]\[x\]' "$PROPOSED"; then
+  approved=$(grep '^-[[:space:]]\[x\]' "$PROPOSED" | sed -E 's/^-[[:space:]]\[x\][[:space:]]*//')
+  printf '%s\n' "$approved" | while IFS= read -r line; do
+    [ -n "$line" ] && printf '%s\n' "$line" >> "$INBOX"
+  done
+  grep -v '^-[[:space:]]\[x\]' "$PROPOSED" > "$PROPOSED.tmp" && mv "$PROPOSED.tmp" "$PROPOSED"
+  n_appr=$(printf '%s\n' "$approved" | grep -c . || true)
+  log_event approved "" "" "MOVED_${n_appr}" 0 ""
+fi
 
 # --- intake: turn free-written notes into queue items ---
 if inbox_has_content; then
