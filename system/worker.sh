@@ -31,6 +31,7 @@ HQ="$HOME/hq/system"
 CONTROL="$HOME/hq/control"
 QUEUE="$CONTROL/queue.md"
 INBOX="$CONTROL/inbox.md"
+HISTORY="$CONTROL/history.md"
 CLAUDE_BIN="$HOME/.local/bin/claude"
 LOCK="$HQ/worker.lock"
 LOG="$HQ/logs/worker-$(date +%Y%m%d-%H%M).log"
@@ -104,16 +105,17 @@ wants_main_merge() {
   printf '%s' "$1" | grep -qiE 'push (to |straight to )?main|merge (to |into )?main|no pr|skip (the )?pr'
 }
 
-# Record what got done, in the inbox, so it's visible next time he opens it.
+# Append to the permanent history. Newest first, directly under the `---` marker.
+# Nothing expires here — the inbox stays clean and this becomes the long record of
+# what the system actually did.
 log_finished() {
-  grep -q '^## ✅ Recently finished' "$INBOX" || return 0
-  cutoff=$(date -v-5d +%Y-%m-%d)
-  /usr/bin/awk -v entry="- $(date +%Y-%m-%d) — $1" -v cutoff="$cutoff" '
-    /^## ✅ Recently finished/ { print; print entry; fin=1; next }
-    fin && /^- 20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]/ { if ($2 >= cutoff) print; next }
-    fin && (/^##/ || /^<!--/) { fin=0 }
+  [ -f "$HISTORY" ] || printf '# History — what the agent has done\n\n---\n' > "$HISTORY"
+  entry="- $(date +%Y-%m-%d\ %H:%M) — $1" /usr/bin/awk '
+    BEGIN { e = ENVIRON["entry"]; done = 0 }
+    !done && /^---[[:space:]]*$/ { print; print ""; print e; done = 1; next }
     { print }
-  ' "$INBOX" > "$INBOX.tmp" && mv "$INBOX.tmp" "$INBOX"
+    END { if (!done) { print ""; print e } }
+  ' "$HISTORY" > "$HISTORY.tmp" && mv "$HISTORY.tmp" "$HISTORY"
 }
 
 # ---------- one run ----------

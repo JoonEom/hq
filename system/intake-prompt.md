@@ -53,11 +53,12 @@ add a duplicate next to the old one. Only edit a task a note is clearly about; l
 unrelated task exactly as-is. When unsure whether it's the same task, treat the inbox
 version as the source of truth.
 
-Notes are often reactions to lines in the inbox's "## ✅ Recently finished" list (above
-the write marker) — fix-ups on work just done. File those as tasks that NAME the PR and
-say "check out the branch of PR #N in <repo> and push the fixes to that same branch", so
-the agent amends the existing PR instead of opening a new one. Never file the finished
-lines themselves; that list is a log, not notes.
+Notes are often reactions to work just finished — a fix-up on something the agent
+already built. Recent work is logged in ~/hq/control/history.md (newest first); read it
+when a note refers to something already done, so you can name the right PR. File those
+as tasks that say "check out the branch of PR #N in <repo> and push the fixes to that
+same branch", so the agent amends the existing PR instead of opening a new one.
+Never write to history.md — it's the agent's log, and it is append-only.
 
 NEVER put a `[YOU]` item in queue.md — those belong in for-you.md.
 Then clear the inbox: remove the note lines you just filed, but KEEP every `##` section

@@ -13,10 +13,9 @@ Keep the "##" headings — they're permanent. Just add your lines under them.
 (Shortcut: start any line with "idea:" to park a rough thought instead of running it.)
 (Shortcut: say "push to main" in a note to skip the pull request on a small fix.)
 
-## ✅ Recently finished — what Claude just did (read-only; lines expire after ~5 days)
-
-Happy with an item? Do nothing — silence is approval. Want changes? Write a normal note
-below (mention the PR number) and Claude files it as a fix-up task on that same PR.
+Finished work is logged in **history.md**, not here — this file stays empty so it's
+only ever your own notes. Want changes to something it finished? Write a normal note
+below mentioning the PR number, and Claude files it as a fix-up on that same PR.
 
 <!-- WRITE BELOW THIS LINE — put each note under the model you want -->
 
