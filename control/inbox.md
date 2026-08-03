@@ -25,7 +25,6 @@ below (mention the PR number) and Claude files it as a fix-up task on that same 
 
 ## 🛠️ Sonnet — normal work: building features, code, copy, docs
 
-## ⚡ Fable — capable all-rounder (good default if you're unsure)
 
 ## 🍃 Haiku — quick + simple: tiny edits, rename this, jot that
 
