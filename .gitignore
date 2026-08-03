@@ -1,0 +1,10 @@
+# Your projects are each their own git repo — HQ does not track them.
+# This is what avoids a "repo inside a repo" mess.
+projects/
+
+# Runtime noise from the worker
+system/logs/
+system/worker.lock
+
+# macOS
+.DS_Store
