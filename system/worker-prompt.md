@@ -17,6 +17,12 @@ Rules:
   entry you write for it: `Decision: <what was chosen> — <why>, not <alternative>`. Skip
   this for routine work; it's for the choices Joon would otherwise have to re-explain
   to a future session.
+- **If this prompt carries a `FIX REQUIRED` block:** a separate fresh agent actually ran
+  the project's tests/checks on the PR you just opened and they failed. Don't restart the
+  task — checkout the same branch (`gh pr checkout <pr>`), fix exactly the failure
+  described, push, and finish the same way (RESULT: DONE, same PR). This can happen up to
+  twice; if you can't fix it, still end with RESULT: DONE and describe what you tried —
+  the system parks it for Joon to look at after a third failed test.
 - RESUME, don't restart: a previous run may have died mid-task (usage limits, crash).
   Before starting, check for an existing feature branch or draft PR for this item
   (`git branch -a`, `gh pr list`) and for a progress note appended to the queue item.

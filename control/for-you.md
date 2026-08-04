@@ -15,6 +15,10 @@ pulls from here.
 
 - [ ] Prep for the Ryan Kang interview call — Wed Aug 5, 2–3pm, nothing prepared yet
 - [ ] Install and test Kairo TestFlight build 13 — before spending another build credit
+- [ ] Prep for recruiter calls — Thu Aug 6 and Fri Aug 7 (plan/study for the calls)
+- [ ] Research companies for recruiter calls — Thu Aug 6 and Fri Aug 7
+- [ ] Create launch video for Kairo app
+- [ ] Test Kairo app once it's uploaded to App Store
 
 ## Ideas — revisit later, not scheduled
 

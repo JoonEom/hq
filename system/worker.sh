@@ -204,6 +204,29 @@ if inbox_has_content; then
   ping "📥 HQ — got your notes" "Filed ${filed} item(s) from your inbox into the queue."
 fi
 
+# --- tester: a fresh session actually runs the project's checks on the branch ---
+# Read-only, no comments posted anywhere. Feeds work_item()'s retry loop: FAIL sends
+# the coding agent back with the concrete error; PASS lets the item proceed to review.
+test_pr() {
+  pr="$1"; item="$2"
+  [ -z "$pr" ] && { echo "TEST: PASS"; return; }
+  t0=$(date +%s)
+  out=$("$CLAUDE_BIN" -p "$(cat "$HQ/test-prompt.md")
+
+PR: $pr
+TASK: $item" --model claude-sonnet-5 \
+    --permission-mode acceptEdits \
+    --allowedTools 'Bash(gh pr checkout:*),Bash(gh pr view:*),Bash(git status:*),Bash(npm:*),Bash(npm run:*),Bash(sh:*),Bash(bash:*),Bash(./scripts/verify.sh:*)' 2>&1)
+  printf '\n=== TEST: %s ===\n%s\n' "$item" "$out" >> "$LOG"
+  if printf '%s' "$out" | grep -q "TEST: FAIL"; then
+    log_event test "$item" claude-sonnet-5 FAIL "$(( $(date +%s) - t0 ))" "$pr"
+    echo "$out"
+  else
+    log_event test "$item" claude-sonnet-5 PASS "$(( $(date +%s) - t0 ))" "$pr"
+    echo "TEST: PASS"
+  fi
+}
+
 # --- reviewer: a fresh session reads the diff the worker just produced ---
 # Read-only. It cannot merge or edit. For draft PRs it comments; for a
 # merge-to-main item it runs BEFORE the merge and can veto it.
@@ -253,7 +276,8 @@ you were not asked to."
     "$CLAUDE_BIN" -p "$(cat "$HQ/worker-prompt.md")
 $merge_note
 
-ITEM: $item" --model "$1" \
+ITEM: $item
+${2:-}" --model "$1" \
       --permission-mode acceptEdits \
       --allowedTools "$ALLOWED_TOOLS" 2>&1
   }
@@ -283,6 +307,36 @@ ITEM: $item" --model "$1" \
 
   short=$(printf '%s' "$item" | sed -E 's/\[model:[a-z]+\] ?//' | cut -c1-110)
   pr=$(printf '%s' "$out" | grep -oE 'https://github\.com/[^ )]+/pull/[0-9]+' | tail -1)
+
+  # --- fresh test / fix loop: a second agent actually runs the checks. If they
+  # fail, send the coder back with the concrete error, up to 2 more tries, before
+  # this ever reaches a human review comment or Joon's phone.
+  if printf '%s' "$out" | grep -q 'RESULT: DONE' && [ -n "$pr" ]; then
+    attempt=1
+    while [ "$attempt" -le 3 ]; do
+      test_out=$(test_pr "$pr" "$item")
+      printf '%s' "$test_out" | grep -q 'TEST: FAIL' || break
+      [ "$attempt" -eq 3 ] && break
+      fail_detail=$(printf '%s' "$test_out" | sed -n '/TEST: FAIL/,$p' | tail -n +2)
+      fix_note="FIX REQUIRED — attempt $((attempt + 1))/3. The PR above ($pr) failed a fresh test run.
+Do not restart the task; fix this specific failure on the existing branch, push, and
+finish the same way as before.
+
+Failure:
+$fail_detail"
+      out=$(run "$used_model" "$fix_note")
+      printf '\n=== ITEM FIX (attempt %d): %s ===\n%s\n' "$((attempt + 1))" "$item" "$out" >> "$LOG"
+      pr=$(printf '%s' "$out" | grep -oE 'https://github\.com/[^ )]+/pull/[0-9]+' | tail -1)
+      attempt=$((attempt + 1))
+    done
+    if printf '%s' "$test_out" | grep -q 'TEST: FAIL'; then
+      short=$(printf '%s' "$item" | sed -E 's/\[model:[a-z]+\] ?//' | cut -c1-110)
+      ping "⚠️ HQ — failed testing 3x, parked it" "$short — marked ⚠️ in the queue. PR left open for you to look at: $pr"
+      log_event task "$item" "$used_model" TEST_EXHAUSTED "$(( $(date +%s) - started ))" "$pr"
+      echo "BLOCKED"; return
+    fi
+  fi
+
   # The agent never merges. It signals readiness; the merge happens here, after review.
   ready_to_merge=$(printf '%s' "$out" | grep -q 'READY TO MERGE:' && echo yes || echo no)
 
