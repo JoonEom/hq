@@ -3,24 +3,22 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.jooneom.hq-briefing</string>
+  <string>com.jooneom.hq-worker</string>
   <key>ProgramArguments</key>
   <array>
     <string>/Users/jooneom/hq/system/hqrun</string>
-    <string>/Users/jooneom/hq/system/briefing.sh</string>
+    <string>/Users/jooneom/hq/system/worker.sh</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict>
-    <key>Hour</key>
-    <integer>7</integer>
     <key>Minute</key>
-    <integer>57</integer>
+    <integer>0</integer>
   </dict>
   <key>RunAtLoad</key>
-  <false/>
+  <true/>
   <key>StandardOutPath</key>
-  <string>/Users/jooneom/hq/system/logs/launchd-briefing.log</string>
+  <string>/Users/jooneom/hq/system/logs/launchd-worker.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/jooneom/hq/system/logs/launchd-briefing.log</string>
+  <string>/Users/jooneom/hq/system/logs/launchd-worker.log</string>
 </dict>
 </plist>

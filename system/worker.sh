@@ -326,7 +326,9 @@ for repo in "$HOME"/hq/projects/*/; do
 done
 
 ready_count=$(ready_items | wc -l | tr -d ' ')
-blocked_count=$(count '⚠️' "$QUEUE")
+# Only real task lines count as blocked — the queue's own instructions mention
+# ⚠️ twice, and a bare grep reported "2 blocked" on an empty queue.
+blocked_count=$(count '^-[[:space:]]\[.*⚠️' "$QUEUE")
 open_count=$(count '^-[[:space:]]\[[[:space:]]?\]' "$QUEUE")
 printf '{"last_run":"%s","items_worked":%s,"ready":%s,"blocked":%s,"open":%s,"worktrees":%s}\n' \
   "$(now_iso)" "$count_done" "$ready_count" "$blocked_count" "$open_count" "$worktrees_live" > "$STATUS"

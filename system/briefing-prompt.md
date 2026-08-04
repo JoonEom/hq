@@ -6,7 +6,7 @@ Gather (skip anything unreachable without complaining about it):
    what got done since yesterday, what the worker will pick up next, any ⚠️ blocked items.
 2. Joon's own to-dos (~/hq/control/for-you.md):
    every open `- [ ]` under "## To do" — these are the things waiting on Joon himself.
-3. Kairo repo (~/Downloads/kairo): current branch, open PRs (`gh pr list`), anything
+3. Kairo repo (~/hq/projects/kairo): current branch, open PRs (`gh pr list`), anything
    uncommitted or unusual.
 4. If Gmail / Google Calendar tools are available in this session: today's events and
    any important-looking unread email. If they aren't available, skip silently.
