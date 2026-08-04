@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ============================================================
 # HQ daily briefing — runs every morning via launchd.
-# A headless Claude session writes the briefing into iCloud
-# (Claude/briefings/YYYY-MM-DD.md) and pings the phone.
+# A headless Claude session writes the briefing to
+# ~/hq/control/briefings/YYYY-MM-DD.md and pings the phone.
 # Permissions: read-mostly — auto-accepts file edits (to write
 # the briefing) and allows git/gh status commands, nothing else.
 # ============================================================
@@ -28,5 +28,5 @@ printf '%s\n' "$out" > "$LOG"
 
 summary=$(printf '%s\n' "$out" | grep '^BRIEF: ' | head -1 | sed 's/^BRIEF: //' | cut -c1-170)
 curl -fsS --max-time 10 -H "Title: ☀️ Daily briefing" \
-  -d "${summary:-Briefing ready: Files → iCloud → Claude → briefings}" \
+  -d "${summary:-Briefing ready: ~/hq/control/briefings}" \
   "https://ntfy.sh/$NTFY_TOPIC" >/dev/null 2>&1 || true
