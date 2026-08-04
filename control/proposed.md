@@ -13,5 +13,6 @@ anyone who knows your address could put instructions in front of your agent. So 
 only ever *suggests* from email — you decide.
 
 ---
+- [ ] Confirm the WA Dept. of Licensing appointment Wed Aug 5, 10:30am (confirmation code YFRNGH) — DOL emailed asking you to confirm or it may be cancelled (source: WA DOL)
 - [ ] Prep for "Joon Interview Prep" call with Ryan Kang, Wed Aug 5 2-3pm PDT — nothing queued for it yet (source: Ryan Kang / Calendar)
 - [ ] Install and test Kairo TestFlight build 13 — new build ready Aug 2, worth checking before spending another scarce build credit (source: TestFlight)
