@@ -8,3 +8,6 @@ system/worker.lock
 
 # macOS
 .DS_Store
+
+# temporary worktrees created for edits
+.hqwork
