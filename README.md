@@ -44,6 +44,20 @@ pings you instead.
 Touch `.env` or secrets · force-push · delete anything outside the repo it's working
 in · merge anything you didn't explicitly ask it to.
 
+## Memory
+
+Two layers:
+
+- **`control/history.md`** — every finished task, newest first. When a task involves
+  a real decision (an approach picked over an alternative, and why), the agent adds a
+  `Decision:` line so a future session doesn't have to rediscover it.
+- **MemPalace** — a searchable archive of every past session (not just HQ's). Before
+  starting a task, the worker searches it for relevant past decisions. A **weekly
+  reconciler** (Sundays 6:30am) mines that week's `history.md` into it, and checks
+  `queue.md` / `for-you.md` / the memory fact files for stale PR/branch claims — a
+  task pointing at a PR that already merged, a memory file saying something is "open"
+  that closed weeks ago — and fixes what it finds.
+
 ## Where things are recorded
 
 - `system/runs.jsonl` — every event, append-only. The honest record of what happened.

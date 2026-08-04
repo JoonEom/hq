@@ -45,7 +45,7 @@ AUTOCOMMIT=1               # commit ~/hq after each run so changes have history
 
 # Scoped, not disarmed: file edits plus common build commands are pre-approved;
 # anything else is denied and the task is marked blocked rather than improvised.
-ALLOWED_TOOLS='Bash(git:*),Bash(gh:*),Bash(npm:*),Bash(npx:*),Bash(node:*),Bash(bash scripts/verify.sh:*),Bash(mkdir:*),Bash(ls:*),Bash(mv:*),Bash(cp:*)'
+ALLOWED_TOOLS='Bash(git:*),Bash(gh:*),Bash(npm:*),Bash(npx:*),Bash(node:*),Bash(bash scripts/verify.sh:*),Bash(mkdir:*),Bash(ls:*),Bash(mv:*),Bash(cp:*),Bash(mempalace:*),mcp__mempalace__mempalace_search'
 
 # ---------- small helpers ----------
 
@@ -88,15 +88,36 @@ ready_items() {
 }
 
 # Mark a blocked task so it stops being re-picked (and re-pinged) hourly.
+# Dated so a stuck-for-a-week item can be escalated once instead of forgotten.
 park_blocked() {
-  q_line="$1" /usr/bin/awk '
-    BEGIN { line = ENVIRON["q_line"]; done = 0 }
+  today="$(date +%Y-%m-%d)" q_line="$1" /usr/bin/awk '
+    BEGIN { line = ENVIRON["q_line"]; d = ENVIRON["today"]; done = 0 }
     !done && $0 == line && !index($0, "⚠️") {
-      print $0 " — ⚠️ blocked (details: ~/hq/system/logs) — delete this note to retry"
+      print $0 " — ⚠️ blocked " d " (details: ~/hq/system/logs) — delete this note to retry"
       done = 1; next
     }
     { print }
   ' "$QUEUE" > "$QUEUE.tmp" && mv "$QUEUE.tmp" "$QUEUE"
+}
+
+# A ⚠️ item stuck 7+ days without you noticing gets exactly one follow-up ping,
+# then an (escalated) tag so it never pings again on its own.
+escalate_stale_blocked() {
+  cutoff=$(date -v-7d +%Y-%m-%d 2>/dev/null || date -d '-7 days' +%Y-%m-%d)
+  grep -E '⚠️ blocked [0-9]{4}-[0-9]{2}-[0-9]{2}' "$QUEUE" | grep -v '(escalated)' | while IFS= read -r line; do
+    d=$(printf '%s' "$line" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)
+    [ -z "$d" ] && continue
+    if [[ "$d" < "$cutoff" ]]; then
+      short=$(printf '%s' "$line" | strip_box | cut -c1-110)
+      ping "⏰ HQ — stuck a week" "Still blocked since $d: $short"
+      esc_line="$line" /usr/bin/awk '
+        BEGIN { line = ENVIRON["esc_line"] }
+        $0 == line { print $0 " (escalated)"; next }
+        { print }
+      ' "$QUEUE" > "$QUEUE.tmp" && mv "$QUEUE.tmp" "$QUEUE"
+      log_event escalate "$short" "" STALE_7D 0 ""
+    fi
+  done
 }
 
 strip_box() { sed -E 's/^-[[:space:]]\[[[:space:]]?\][[:space:]]//'; }
@@ -313,6 +334,29 @@ while [ "$count_done" -lt "$MAX_ITEMS" ]; do
   [ "$status" = "BLOCKED" ] && park_blocked "$raw"
   [ "$status" = "LIMITS" ] && break
 done
+
+escalate_stale_blocked
+
+# --- weekly spend check: how often did limits actually bite this week? ---
+# Runs once a day (top of the hour it happens to catch), stamped so it doesn't
+# repeat. Purely informational — it can't change your plan, only tell you.
+SPEND_STAMP="$HQ/.last-spend-check"
+if [ ! -f "$SPEND_STAMP" ] || [ -n "$(find "$SPEND_STAMP" -mmin +1200 2>/dev/null)" ]; then
+  week_ago_epoch=$(( $(date +%s) - 604800 ))
+  hits=0
+  if [ -s "$RUNS" ]; then
+    while IFS= read -r ts; do
+      [ -z "$ts" ] && continue
+      e=$(date -j -u -f "%Y-%m-%dT%H:%M:%SZ" "$ts" +%s 2>/dev/null || echo 0)
+      [ "$e" -gt "$week_ago_epoch" ] && hits=$((hits + 1))
+    done < <(grep -E '"status":"(LIMITS|gated)' "$RUNS" | sed -n 's/.*"ts":"\([^"]*\)".*/\1/p')
+  fi
+  if [ "$hits" -ge 3 ]; then
+    ping "📊 HQ — usage limits hit ${hits}x this week" "Tasks kept getting paused on limits. Logs: ~/hq/system/logs"
+  fi
+  touch "$SPEND_STAMP"
+  log_event spend_check "" "" "HITS_${hits}" 0 ""
+fi
 
 log_event run_end "" "" OK "$count_done" ""
 

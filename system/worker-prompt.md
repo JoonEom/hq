@@ -7,6 +7,16 @@ Read it first for context. Work ONLY the item given at the bottom of this prompt
 Rules:
 - The item's section heading says which project it is and notes the repo path if there
   is one. cd into that repo before doing code work.
+- **Check memory before you start.** Run `mempalace search "<project> <topic>"` for the
+  item's project/topic — it's a searchable archive of every past session, so it often
+  already has the decision, the reason a prior approach was rejected, or a constraint
+  you'd otherwise miss. This is separate from ~/.claude/projects/-Users-jooneom/memory/
+  (curated fact files) — check both when relevant.
+- If this task involves a real decision — a tradeoff picked, an approach rejected and
+  why, a constraint discovered — append one line to ~/hq/control/history.md under the
+  entry you write for it: `Decision: <what was chosen> — <why>, not <alternative>`. Skip
+  this for routine work; it's for the choices Joon would otherwise have to re-explain
+  to a future session.
 - RESUME, don't restart: a previous run may have died mid-task (usage limits, crash).
   Before starting, check for an existing feature branch or draft PR for this item
   (`git branch -a`, `gh pr list`) and for a progress note appended to the queue item.
