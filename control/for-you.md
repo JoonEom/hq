@@ -19,6 +19,7 @@ pulls from here.
 - [ ] Research companies for recruiter calls — Thu Aug 6 and Fri Aug 7
 - [ ] Create launch video for Kairo app
 - [ ] Test Kairo app once it's uploaded to App Store
+- [ ] Install and test Kairo TestFlight build 15 (v1.1.0) — newer build available, supersedes build 13
 
 ## Ideas — revisit later, not scheduled
 
