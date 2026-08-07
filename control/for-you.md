@@ -20,6 +20,7 @@ pulls from here.
 - [ ] Create launch video for Kairo app
 - [ ] Test Kairo app once it's uploaded to App Store
 - [ ] Install and test Kairo TestFlight build 15 (v1.1.0) — newer build available, supersedes build 13
+- [ ] Install and test Kairo TestFlight build 16 (v1.1.0) — newer build available, supersedes build 15
 
 ## Ideas — revisit later, not scheduled
 
