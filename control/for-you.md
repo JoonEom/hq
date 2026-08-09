@@ -21,6 +21,7 @@ pulls from here.
 - [ ] Test Kairo app once it's uploaded to App Store
 - [ ] Install and test Kairo TestFlight build 15 (v1.1.0) — newer build available, supersedes build 13
 - [ ] Install and test Kairo TestFlight build 16 (v1.1.0) — newer build available, supersedes build 15
+- [ ] Prep for "Joon Interview Prep" call with Ryan Kang — Mon Aug 10, 4–5pm, nothing prepared yet
 
 ## Ideas — revisit later, not scheduled
 
