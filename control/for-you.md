@@ -22,6 +22,7 @@ pulls from here.
 - [ ] Install and test Kairo TestFlight build 15 (v1.1.0) — newer build available, supersedes build 13
 - [ ] Install and test Kairo TestFlight build 16 (v1.1.0) — newer build available, supersedes build 15
 - [ ] Prep for "Joon Interview Prep" call with Ryan Kang — Mon Aug 10, 4–5pm, nothing prepared yet
+- [ ] Submit your availability for the Axon coding interview — Sam is waiting, you never filled out the form (https://mloop.in/s/1uT84jx221f)
 
 ## Ideas — revisit later, not scheduled
 
