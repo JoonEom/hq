@@ -19,6 +19,7 @@ pulls from here.
 - [ ] Book your interview slot with Pariveda (Entry-Level Software Engineer) — Ashby sent a reminder, you haven't picked a time yet
 - [ ] Finish logging into Okta and Workday for DigitalOcean — IT sent your temp Okta password and Workday needs the updated password tied to employee ID 11806
 - [ ] Reply to knoah0516@gmail.com about the resume they sent you Oct 13 — no message with it, unclear what they want from you
+- [ ] Complete AllianceBernstein on-demand video interview (Software Development Associate) — invite expires ~72 hrs after Oct 14, 7:30pm, so by Wed Oct 17 evening
 
 ## Ideas — revisit later, not scheduled
 
