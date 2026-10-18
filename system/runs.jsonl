@@ -990,3 +990,4 @@
 {"ts":"2026-10-18T13:15:02Z","event":"run_start","item":"","model":"","status":"OK","secs":0,"pr":""}
 {"ts":"2026-10-18T13:15:15Z","event":"intake","item":"","model":"claude-haiku-4-5-20251001","status":"FILED_0","secs":0,"pr":""}
 {"ts":"2026-10-18T13:15:15Z","event":"run_end","item":"","model":"","status":"OK","secs":0,"pr":""}
+{"ts":"2026-10-18T13:32:46Z","event":"reconcile","item":"","model":"claude-sonnet-5","status":"0 stale claim(s) fixed, 7 checked clean","secs":65,"pr":""}
