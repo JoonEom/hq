@@ -22,6 +22,10 @@ pulls from here.
 - [ ] Complete AllianceBernstein on-demand video interview (Software Development Associate) — invite expires ~72 hrs after Oct 14, 7:30pm, so by Wed Oct 17 evening
 - [ ] Sign up for ADP Self-Service for DigitalOcean onboarding — three essential onboarding tasks are waiting there
 - [ ] Fix the failing markdownlint check on your DigitalOcean docs PR #4668 — it's approved but CI is red, so it can't merge as-is
+- [ ] Complete the BodySpec DEXA scan intake form before your appointment — Sat Oct 25, 3:03pm at BodySpec Bellevue
+- [ ] Check Railway's security disclosure email about anomalous access to stored environment variables, and decide whether to rotate credentials — sent Oct 21
+- [ ] Decide whether to enroll in the Din Tai Fung Retirement Plan via Principal before open enrollment ends — you've been eligible since Jul 1, 2025
+- [ ] Decide whether to keep or cancel Monarch — trial ends and paid membership starts Oct 22
 
 ## Ideas — revisit later, not scheduled
 
