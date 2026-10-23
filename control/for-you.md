@@ -26,6 +26,8 @@ pulls from here.
 - [ ] Check Railway's security disclosure email about anomalous access to stored environment variables, and decide whether to rotate credentials — sent Oct 21
 - [ ] Decide whether to enroll in the Din Tai Fung Retirement Plan via Principal before open enrollment ends — you've been eligible since Jul 1, 2025
 - [ ] Decide whether to keep or cancel Monarch — trial ends and paid membership starts Oct 22
+- [ ] Prep for your interview with Garret — Fri Oct 23, 5:00pm, nothing prepared yet
+- [ ] Prep for the Ryan Park interview — Wed Oct 28, 3:30pm, nothing prepared yet
 
 ## Ideas — revisit later, not scheduled
 
