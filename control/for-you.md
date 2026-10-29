@@ -29,6 +29,14 @@ pulls from here.
 - [ ] Prep for your interview with Garret — Fri Oct 23, 5:00pm, nothing prepared yet
 - [ ] Prep for the Ryan Park interview — Wed Oct 28, 3:30pm, nothing prepared yet
 
+## Kairo — every week (recurring, don't tick off)
+
+- **Wednesday:** pick next week's prompt and tell Claude — it schedules it (reveal stays 8am PT; after DST it's set to 16:00 UTC).
+- **Thursday (reveal):** send your staff picks + the best of the week **to Claude** (not Codex). Claude builds the carousel AND saves the picks — that turns their week gold on their profile and gives First Class / Lucky Panda. If anyone else makes the carousel, still send Claude the names so the gold + badges update.
+- **The Makers badge:** tell Claude when someone joins the team — it's added by hand.
+- Nov 5: the Halloween week reveals (those postcards have the pumpkin postmark).
+- Still open: decide how Create should handle old stuck postcards, so the "didn't upload" fix can be built.
+
 ## Ideas — revisit later, not scheduled
 
   (start an inbox note with "idea:" to park one here)
